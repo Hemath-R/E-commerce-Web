@@ -3,5 +3,5 @@ services:
     name: krithe-store-backend
     env: java
     rootDir: backend
-    buildCommand: mvn clean install
+    buildCommand: ./mvnw clean install
     startCommand: java -jar target/krithe-store-1.0.0.jar
