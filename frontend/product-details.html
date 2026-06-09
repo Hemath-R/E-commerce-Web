@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product — KRITHE STORE</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+  <header class="navbar" id="navbar"></header>
+
+  <main class="container product-detail">
+    <div class="gallery">
+      <div class="gallery-main">
+        <img id="mainImage" src="" alt="Product">
+      </div>
+      <div class="gallery-thumbs" id="galleryThumbs"></div>
+    </div>
+    <div class="detail-info">
+      <div class="detail-brand" id="detailBrand"></div>
+      <h1 class="detail-title" id="detailTitle"></h1>
+      <div class="detail-rating" id="detailRating"></div>
+      <div class="detail-price" id="detailPrice"></div>
+      <p class="detail-desc" id="detailDesc"></p>
+
+      <div class="size-selector">
+        <label>Select Size (US)</label>
+        <div class="sizes">
+          <button class="size-btn" data-size="7">7</button>
+          <button class="size-btn" data-size="8">8</button>
+          <button class="size-btn active" data-size="9">9</button>
+          <button class="size-btn" data-size="10">10</button>
+          <button class="size-btn" data-size="11">11</button>
+          <button class="size-btn" data-size="12">12</button>
+        </div>
+      </div>
+
+      <div class="qty-selector">
+        <label style="margin-right:8px;color:var(--text-secondary)">Quantity:</label>
+        <button class="qty-btn" id="qtyMinus">−</button>
+        <span class="qty-value" id="qtyValue">1</span>
+        <button class="qty-btn" id="qtyPlus">+</button>
+      </div>
+
+      <div class="detail-actions">
+        <button class="btn btn-primary" id="addToCartBtn">Add to Cart</button>
+        <button class="btn btn-outline" id="buyNowBtn">Buy Now</button>
+      </div>
+    </div>
+  </main>
+
+  <section class="section" style="background:var(--bg-secondary)">
+    <div class="container">
+      <h2 class="section-title">You May Also Like</h2>
+      <div class="product-grid" id="relatedProducts"></div>
+    </div>
+  </section>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/products.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', Products.initProductDetail);</script>
+</body>
+</html>

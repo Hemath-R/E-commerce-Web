@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payment — KRITHE STORE</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+  <header class="navbar" id="navbar"></header>
+
+  <main class="container payment-page">
+    <div class="glass" style="padding:48px">
+      <h1 class="section-title" style="font-size:2rem">Secure Payment</h1>
+      <p class="section-subtitle">Complete your purchase securely via Razorpay</p>
+
+      <div class="summary-row" style="margin:24px 0">
+        <span>Order</span><span id="paymentOrderNum" style="color:var(--gold)"></span>
+      </div>
+      <div class="summary-row total">
+        <span>Amount Due</span><span id="paymentAmount"></span>
+      </div>
+
+      <h3 style="margin:32px 0 16px;font-family:var(--font-display)">Select Payment Method</h3>
+      <div class="payment-methods">
+        <div class="payment-method active" data-method="upi">
+          <svg width="32" height="32" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span>UPI</span>
+        </div>
+        <div class="payment-method" data-method="card">
+          <svg width="32" height="32" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+          <span>Debit / Credit Card</span>
+        </div>
+        <div class="payment-method" data-method="netbanking">
+          <svg width="32" height="32" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 21h18M3 10h18M5 6l7-3 7 3M4 10v11M20 10v11M8 14v3M12 14v3M16 14v3"/></svg>
+          <span>Net Banking</span>
+        </div>
+        <div class="payment-method" data-method="wallet">
+          <svg width="32" height="32" fill="none" stroke="var(--gold)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 12V7H5a2 2 0 010-4h14v4M3 7v10a2 2 0 002 2h16v-5M16 12a2 2 0 100 4 2 2 0 000-4z"/></svg>
+          <span>Wallet</span>
+        </div>
+      </div>
+
+      <p style="color:var(--text-secondary);font-size:0.85rem;margin-bottom:24px">
+        You will be redirected to Razorpay's secure payment gateway. Supports UPI, Cards, Net Banking & more.
+      </p>
+      <button class="btn btn-primary btn-block" id="payBtn">Pay Now</button>
+    </div>
+  </main>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/cart.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', Payment.init);</script>
+</body>
+</html>

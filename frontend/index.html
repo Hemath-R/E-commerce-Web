@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KRITHE STORE — Premium luxury footwear. Discover curated collections of designer shoes.">
+  <title>KRITHE STORE — Premium Luxury Footwear</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+  <header class="navbar" id="navbar"></header>
+
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="hero-badge">New Collection 2024</span>
+        <h1>Step Into <em>Luxury</em></h1>
+        <p>Discover handcrafted premium footwear that defines elegance. Every pair tells a story of craftsmanship and style.</p>
+        <div class="hero-btns">
+          <a href="products.html" class="btn btn-primary">Explore Collection</a>
+          <a href="products.html?category=Sneakers" class="btn btn-outline">View Sneakers</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800" alt="Premium Nike sneaker">
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="featured">
+    <div class="container">
+      <h2 class="section-title">Featured Collection</h2>
+      <p class="section-subtitle">Handpicked selections from the world's finest brands</p>
+      <div class="product-grid" id="featuredGrid"></div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--bg-secondary)">
+    <div class="container">
+      <h2 class="section-title">Trending Now</h2>
+      <p class="section-subtitle">What everyone's talking about this season</p>
+      <div class="product-grid" id="trendingGrid"></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card glass">
+          <div class="stat-number" data-count="15000">0</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-number" data-count="500">0</div>
+          <div class="stat-label">Premium Brands</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-number" data-count="98">0</div>
+          <div class="stat-label">Satisfaction Rate</div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-number" data-count="24">0</div>
+          <div class="stat-label">Hour Delivery</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" style="background:var(--bg-secondary)">
+    <div class="container">
+      <h2 class="section-title">Customer Reviews</h2>
+      <p class="section-subtitle">Trusted by thousands of footwear enthusiasts</p>
+      <div class="reviews-grid">
+        <div class="review-card glass fade-in">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The quality is unmatched. My Air Monarch Elite arrived in perfect condition. KRITHE STORE has become my go-to for premium footwear."</p>
+          <div class="review-author">
+            <div class="review-avatar">RK</div>
+            <div><div class="review-name">Rahul Kapoor</div><div class="review-role">Verified Buyer</div></div>
+          </div>
+        </div>
+        <div class="review-card glass fade-in">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Exceptional service and lightning-fast delivery. The Classic Oxford Heritage is absolutely stunning. Worth every rupee."</p>
+          <div class="review-author">
+            <div class="review-avatar">PS</div>
+            <div><div class="review-name">Priya Sharma</div><div class="review-role">Verified Buyer</div></div>
+          </div>
+        </div>
+        <div class="review-card glass fade-in">
+          <div class="review-stars">★★★★½</div>
+          <p class="review-text">"Best online shoe shopping experience I've had. The website is beautiful and the checkout process was seamless with Razorpay."</p>
+          <div class="review-author">
+            <div class="review-avatar">AM</div>
+            <div><div class="review-name">Arjun Mehta</div><div class="review-role">Verified Buyer</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="newsletter glass">
+        <h2 class="section-title">Stay in the Loop</h2>
+        <p class="section-subtitle" style="margin:0 auto">Subscribe for exclusive drops, early access, and member-only discounts</p>
+        <form class="newsletter-form" onsubmit="event.preventDefault(); Utils.showToast('Subscribed successfully!')">
+          <input type="email" placeholder="Enter your email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/products.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const featured = await API.products.getFeatured();
+        document.getElementById('featuredGrid').innerHTML = featured.map(p => Products.renderCard(p)).join('');
+      } catch { document.getElementById('featuredGrid').innerHTML = '<p style="color:var(--text-secondary)">Start the backend to load products</p>'; }
+      try {
+        const trending = await API.products.getTrending();
+        document.getElementById('trendingGrid').innerHTML = trending.map(p => Products.renderCard(p)).join('');
+      } catch {}
+
+      document.querySelectorAll('[data-count]').forEach(el => {
+        const target = +el.dataset.count;
+        const suffix = target === 98 ? '%' : target === 24 ? 'h' : '+';
+        let current = 0;
+        const step = Math.ceil(target / 60);
+        const timer = setInterval(() => {
+          current += step;
+          if (current >= target) { current = target; clearInterval(timer); }
+          el.textContent = current.toLocaleString() + suffix;
+        }, 30);
+      });
+    });
+  </script>
+</body>
+</html>

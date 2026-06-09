@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cart — KRITHE STORE</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+  <header class="navbar" id="navbar"></header>
+
+  <main class="container cart-layout">
+    <div>
+      <h1 class="section-title" style="margin-bottom:32px">Shopping Cart</h1>
+      <div id="cartItems"></div>
+    </div>
+    <div class="order-summary glass" id="orderSummary"></div>
+  </main>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/cart.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', Cart.load);</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — KRITHE STORE</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="loader-overlay"><div class="loader"></div></div>
+  <header class="navbar" id="navbar"></header>
+
+  <main class="container checkout-layout">
+    <form class="checkout-form glass" id="checkoutForm">
+      <h3>Delivery Details</h3>
+      <div class="form-group">
+        <label for="shippingName">Full Name</label>
+        <input type="text" id="shippingName" name="shippingName" class="form-control" required>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="shippingEmail">Email</label>
+          <input type="email" id="shippingEmail" name="shippingEmail" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="shippingPhone">Phone</label>
+          <input type="tel" id="shippingPhone" name="shippingPhone" class="form-control" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="shippingAddress">Address</label>
+        <textarea id="shippingAddress" name="shippingAddress" class="form-control" rows="3" required></textarea>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="shippingCity">City</label>
+          <input type="text" id="shippingCity" name="shippingCity" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="shippingState">State</label>
+          <input type="text" id="shippingState" name="shippingState" class="form-control" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="shippingPincode">Pincode</label>
+        <input type="text" id="shippingPincode" name="shippingPincode" class="form-control" pattern="[0-9]{6}" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Continue to Payment</button>
+    </form>
+    <div class="order-summary glass" id="checkoutSummary"></div>
+  </main>
+
+  <footer class="footer" id="footer"></footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/navbar.js"></script>
+  <script src="js/cart.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', Checkout.init);</script>
+</body>
+</html>
