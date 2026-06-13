@@ -1,6 +1,6 @@
 package com.krithe.store.util;
 
-import com.krithe.store.security.JwtUtil;
+import com.krithe.store.security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class UserContext {
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtUtil;
 
     public Long getUserId(HttpServletRequest request) {
         String header = request.getHeader("Authorization");

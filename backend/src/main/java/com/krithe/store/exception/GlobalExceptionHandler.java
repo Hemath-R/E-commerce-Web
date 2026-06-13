@@ -36,9 +36,10 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneral(Exception ex) {
-        // Log full exception server-side, but return a generic message to clients to avoid leaking SQL/stack traces
-        log.error("Unhandled exception", ex);
+        // Log full exception server-side and return the exception message for clarity
+        log.error("Unhandled exception: {}", ex.getMessage(), ex);
+        String msg = ex.getMessage() != null ? ex.getMessage() : "Internal server error";
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ApiResponse.error("Unable to process request. Please try again."));
+            .body(ApiResponse.error(msg));
     }
 }

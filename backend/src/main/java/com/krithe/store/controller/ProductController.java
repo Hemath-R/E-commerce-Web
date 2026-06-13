@@ -1,7 +1,7 @@
 package com.krithe.store.controller;
 
 import com.krithe.store.dto.ApiResponse;
-import com.krithe.store.security.JwtUtil;
+import com.krithe.store.security.JwtService;
 import com.krithe.store.service.ProductService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProductController {
     private final ProductService productService;
-    private final JwtUtil jwtUtil;
+    private final JwtService jwtUtil;
 
     @GetMapping
     public ResponseEntity<ApiResponse<?>> getProducts(

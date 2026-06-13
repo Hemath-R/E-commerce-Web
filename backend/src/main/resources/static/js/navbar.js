@@ -31,6 +31,64 @@ function renderNavbar() {
     </div>
   `;
 
+    // Navbar builder + link normalization and simple broken-route logging
+    // Normalize links that accidentally contain filesystem paths from developer mistakes
+    function normalizeHref(href) {
+      if (!href) return href;
+      // common dev-path fragments to strip
+      const fragments = [
+        'backend/src/main/resources/static/',
+        '/src/main/resources/static/',
+        'src/main/resources/static/'
+      ];
+      for (const f of fragments) {
+        const idx = href.indexOf(f);
+        if (idx !== -1) {
+          // take everything after the fragment
+          return href.substring(idx + f.length);
+        }
+      }
+      return href;
+    }
+
+    // Intercept anchor clicks to normalize and optionally check route before navigating
+    document.addEventListener('click', async function (e) {
+      const a = e.target.closest && e.target.closest('a');
+      if (!a) return;
+      const raw = a.getAttribute('href');
+      if (!raw) return;
+
+      const normalized = normalizeHref(raw);
+      if (normalized !== raw) {
+        e.preventDefault();
+        console.info('Normalized navbar link:', raw, '→', normalized);
+        // quick HEAD check to warn about missing pages (best-effort)
+        try {
+          const resp = await fetch(normalized, { method: 'HEAD' });
+          if (!resp.ok) {
+            console.warn('Route may be missing (HEAD):', normalized, resp.status);
+          }
+        } catch (err) {
+          console.warn('Route HEAD check failed for', normalized, err);
+        }
+        window.location.href = normalized;
+        return;
+      }
+
+      // For same-origin links, do a lightweight HEAD check and log 404s
+      try {
+        const url = new URL(raw, window.location.href);
+        if (url.origin === window.location.origin) {
+          const resp = await fetch(url.toString(), { method: 'HEAD' });
+          if (!resp.ok) {
+            console.warn('Navigation target returned non-OK status:', url.toString(), resp.status);
+          }
+        }
+      } catch (err) {
+        // ignore URL parse errors
+      }
+    }, true);
+
   document.getElementById('hamburger')?.addEventListener('click', () => {
     document.getElementById('navLinks').classList.toggle('open');
   });
