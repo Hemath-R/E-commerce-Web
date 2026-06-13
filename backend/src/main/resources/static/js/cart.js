@@ -96,52 +96,67 @@ const Cart = {
 
 const Checkout = {
   async init() {
-    if (!Utils.requireAuth()) return;
+    // Temporary client-only checkout for testing: open Razorpay popup immediately
+    // No backend calls, no order creation, no cart/auth validation
     const form = document.getElementById('checkoutForm');
     const summary = document.getElementById('checkoutSummary');
 
-    try {
-      const items = await API.cart.get();
-      if (!items.length) { window.location.href = 'cart.html'; return; }
+    // Hardcoded test amount (in paise) and test key
+    const TEST_AMOUNT_PAISE = 10000; // ₹100.00
+    const RAZORPAY_TEST_KEY = 'rzp_test_1DP5mmOlF5G5ag';
 
-      let subtotal = items.reduce((s, i) => s + i.price * i.quantity, 0);
-      const shipping = subtotal > 5000 ? 0 : 199;
+    // Show a minimal summary so user sees the amount
+    if (summary) {
       summary.innerHTML = `
-        <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px">Order Summary</h3>
-        ${items.map(i => `<div class="summary-row"><span>${i.name} × ${i.quantity}</span><span>${Utils.formatPrice(i.price * i.quantity)}</span></div>`).join('')}
-        <div class="summary-row"><span>Shipping</span><span>${shipping === 0 ? 'Free' : Utils.formatPrice(shipping)}</span></div>
-        <div class="summary-row total"><span>Total</span><span>${Utils.formatPrice(subtotal + shipping)}</span></div>
+        <h3 style="font-family:var(--font-display);font-size:1.5rem;margin-bottom:24px">Order Summary (Test)</h3>
+        <div class="summary-row"><span>Test Item</span><span>₹100.00</span></div>
+        <div class="summary-row total"><span>Total</span><span>₹100.00</span></div>
       `;
+    }
 
+    // Prefill from local storage if available
+    try {
       const userEmail = localStorage.getItem('userEmail');
       const userName = localStorage.getItem('userName');
-      if (form.shippingEmail) form.shippingEmail.value = userEmail || '';
-      if (form.shippingName) form.shippingName.value = userName || '';
+      if (form && form.shippingEmail) form.shippingEmail.value = userEmail || '';
+      if (form && form.shippingName) form.shippingName.value = userName || '';
+    } catch (err) { /* ignore */ }
 
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const data = {
-          shippingName: form.shippingName.value.trim(),
-          shippingEmail: form.shippingEmail.value.trim(),
-          shippingPhone: form.shippingPhone.value.trim(),
-          shippingAddress: form.shippingAddress.value.trim(),
-          shippingCity: form.shippingCity.value.trim(),
-          shippingState: form.shippingState.value.trim(),
-          shippingPincode: form.shippingPincode.value.trim()
-        };
+    if (!form) return;
 
-        try {
-            console.log('Creating order with data', data);
-            const order = await API.orders.create(data);
-            console.log('Order created', order);
-            sessionStorage.setItem('currentOrder', JSON.stringify(order));
-            window.location.href = 'payment.html';
-        } catch (err) {
-          console.error('Order creation failed', err);
-          Utils.showToast('Unable to place order. Please try again.', 'error');
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const options = {
+        key: RAZORPAY_TEST_KEY,
+        amount: TEST_AMOUNT_PAISE,
+        currency: 'INR',
+        name: 'KRITHE STORE (Test)',
+        description: 'Test Payment',
+        handler: function(response) {
+          console.log('Razorpay test success', response);
+          try { Utils.showToast('Payment successful (test)', 'success'); } catch (err) { /* ignore */ }
+        },
+        prefill: {
+          name: (form.shippingName && form.shippingName.value) || localStorage.getItem('userName') || '',
+          email: (form.shippingEmail && form.shippingEmail.value) || localStorage.getItem('userEmail') || ''
+        },
+        theme: { color: '#c9a962' },
+        modal: {
+          ondismiss: () => {
+            try { Utils.showToast('Payment popup closed', 'info'); } catch (err) { /* ignore */ }
+          }
         }
-      });
-    } catch (err) { Utils.showToast(err.message, 'error'); }
+      };
+
+      try {
+        const rzp = new Razorpay(options);
+        rzp.open();
+      } catch (err) {
+        console.error('Failed to open Razorpay (test)', err);
+        try { Utils.showToast('Unable to open payment popup', 'error'); } catch (e) { /* ignore */ }
+      }
+    });
   }
 };
 
